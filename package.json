@@ -1,0 +1,26 @@
+{
+  "name": "react-native-slide-button",
+  "version": "1.0.0",
+  "description": "Slide to proceed button for React Native",
+  "main": "SwipeButton.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/sreejithr/react-native-slide-button.git"
+  },
+  "keywords": [
+    "react-native",
+    "react",
+    "slide",
+    "swipe",
+    "button"
+  ],
+  "author": "Sreejith R",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sreejithr/react-native-slide-button/issues"
+  },
+  "homepage": "https://github.com/sreejithr/react-native-slide-button#readme"
+}
