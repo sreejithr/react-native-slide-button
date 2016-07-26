@@ -1,7 +1,10 @@
 'use strict';
 
 import React, {
-  Component,
+  Component
+} from 'react';
+
+import {
   StyleSheet,
   View,
   Text,
@@ -11,7 +14,8 @@ import React, {
   Animated
 } from 'react-native';
 
-var Dimensions = require('Dimensions');
+import Dimensions from 'Dimensions';
+
 var SCREEN_WIDTH = Dimensions.get('window').width;
 var SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -37,7 +41,6 @@ export class SwipeButton extends Component {
       onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
-
       onPanResponderGrant: (evt, gestureState) => {},
 
       onPanResponderMove: (evt, gestureState) => {
@@ -54,9 +57,7 @@ export class SwipeButton extends Component {
         if (this.state.dx > this.state.buttonWidth/2.5) {
 
           this.moveButtonAway(() => {
-            self.setState({
-              swiped: true
-            });
+            self.setState({ swiped: true });
 
             if (this.props.onSwipeSuccess !== undefined) {
               this.props.onSwipeSuccess();
