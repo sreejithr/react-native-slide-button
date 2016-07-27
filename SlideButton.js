@@ -1,9 +1,6 @@
 'use strict';
 
-import React, {
-  Component
-} from 'react';
-
+import React, { Component } from 'react';
 import {
   StyleSheet,
   View,
@@ -14,33 +11,34 @@ import {
   Animated
 } from 'react-native';
 
-import Dimensions from 'Dimensions';
-
+var Dimensions = require('Dimensions');
 var SCREEN_WIDTH = Dimensions.get('window').width;
 var SCREEN_HEIGHT = Dimensions.get('window').height;
 
 
-export class SwipeButton extends Component {
+export class SlideButton extends Component {
   constructor(props) {
     super(props);
+    this.buttonWidth = 0;
     this.state = {
       initialX: 0,
       locationX: 0,
       dx: 0,
-      movablePosition: new Animated.Value(0),
-      buttonWidth: 0,
+      animatedX: new Animated.Value(0),
       released: false,
-      swiped: true
+      swiped: true,
     };
   }
 
   componentWillMount() {
     var self = this;
+
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
       onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
       onMoveShouldSetPanResponder: (evt, gestureState) => true,
       onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+      onPanResponderTerminationRequest: (evt, gestureState) => true,
       onPanResponderGrant: (evt, gestureState) => {},
 
       onPanResponderMove: (evt, gestureState) => {
@@ -50,20 +48,16 @@ export class SwipeButton extends Component {
         });
       },
 
-      onPanResponderTerminationRequest: (evt, gestureState) => true,
-
       onPanResponderRelease: (evt, gestureState) => {
-        // Gesture succeeded
-        if (this.state.dx > this.state.buttonWidth/2.5) {
-
-          this.moveButtonAway(() => {
+        // Button movement of > 40% is considered a successful slide
+        if (this.state.dx > (this.buttonWidth * 0.4)) {
+          // Move the button out
+          this.moveButtonOut(() => {
             self.setState({ swiped: true });
-
-            if (this.props.onSwipeSuccess !== undefined) {
-              this.props.onSwipeSuccess();
-            }
+            self.onSwipeSuccess();
           });
 
+          // Slide it back in after 1 sec
           setTimeout(() => {
             self.moveButtonIn(() => {
               self.setState({
@@ -103,6 +97,12 @@ export class SwipeButton extends Component {
     });
   }
 
+  onSwipeSuccess() {
+    if (this.props.onSwipeSuccess !== undefined) {
+      this.props.onSwipeSuccess();
+    }
+  }
+
   measureButton() {
     var self = this;
     this.refs.button.measure((ox, oy, width, height) => {
@@ -114,71 +114,93 @@ export class SwipeButton extends Component {
   }
 
   moveButtonIn(onCompleteCallback) {
+    var self = this;
+    var startPos = this.state.initialX - this.buttonWidth;
+    var endPos = this.state.initialX;
+
     this.setState({
       released: true,
-      movablePosition: new Animated.Value(this.state.initialX - this.state.buttonWidth)
+      animatedX: new Animated.Value(startPos)
+    }, () => {
+      Animated.timing(
+        self.state.animatedX,
+        { toValue: endPos }
+      ).start(onCompleteCallback);
     });
-
-    Animated.timing(
-      this.state.movablePosition,
-      {
-        toValue: this.state.initialX
-      }
-    ).start(onCompleteCallback);
   }
 
-  moveButtonAway(onCompleteCallback) {
+  moveButtonOut(onCompleteCallback) {
+    var self = this;
+    var startPos = this.state.initialX + this.state.dx;
+    var endPos = this.buttonWidth * 2;
+
     this.setState({
       released: true,
-      movablePosition: new Animated.Value(this.state.initialX + this.state.dx)
+      animatedX: new Animated.Value(startPos)
+    }, () => {
+      Animated.timing(
+        self.state.animatedX,
+        { toValue: endPos }
+      ).start(onCompleteCallback);
     });
-
-    Animated.timing(
-      this.state.movablePosition,
-      {
-        toValue: this.state.buttonWidth * 2
-      }
-    ).start(onCompleteCallback);
   }
 
   snapToPosition(onCompleteCallback) {
+    var self = this;
+    var startPos = this.state.initialX + this.state.dx;
+    var endPos = this.state.initialX;
+
     this.setState({
       released: true,
-      movablePosition: new Animated.Value(this.state.initialX + this.state.dx)
+      animatedX: new Animated.Value(startPos)
+    }, () => {
+      Animated.timing(
+        self.state.animatedX,
+        { toValue: endPos }
+      ).start(onCompleteCallback);
     });
-
-    Animated.timing(
-      this.state.movablePosition,
-      {
-        toValue: this.state.initialX
-      }
-    ).start(onCompleteCallback);
   }
 
   onLayout(event) {
+    this.buttonWidth = event.nativeEvent.layout.width;
     this.setState({
-      initialX: event.nativeEvent.layout.x,
-      buttonWidth: event.nativeEvent.layout.width
+      initialX: event.nativeEvent.layout.x
     });
   }
 
   render() {
-    if (this.state.released === true) {
-      return (
-          <View ref="button" style={{position: "relative"}} {...this.panResponder.panHandlers}>
-            <Animated.View style={{position: 'absolute', left: this.state.movablePosition}}>
-              <View>{this.props.children}</View>
-            </Animated.View>
+    var style = [styles.button, this.props.style, {left: this.state.dx}];
+    var button = (
+        <View style={style}>
+          <View onLayout={this.onLayout.bind(this)}>
+            {this.props.children}
           </View>
-      );
-    } else {
-      return (
-          <View ref="button" style={{position: "relative"}} {...this.panResponder.panHandlers}>
-            <View style={{position: 'absolute', left: this.state.dx}}>
-              <View onLayout={this.onLayout.bind(this)}>{this.props.children}</View>
-            </View>
-          </View>
+        </View>
+    );
+
+    if (this.state.released) {
+      style = [styles.button, this.props.style, { left: this.state.animatedX }];
+      button = (
+          <Animated.View style={style}>
+            {this.props.children}
+          </Animated.View>
       );
     }
+
+    return (
+        <View ref="button" style={styles.container} 
+         {...this.panResponder.panHandlers}>
+          { button }
+        </View>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    position: 'relative'
+  },
+  button: {
+    position: 'absolute'
+  }
+})
