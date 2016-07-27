@@ -17,6 +17,12 @@
     "swipe",
     "button"
   ],
+  "files": [
+    "LICENSE",
+    "README.md",
+    "SlideButton.js",
+    "package.json"
+  ],
   "author": "Sreejith R",
   "license": "MIT",
   "bugs": {

@@ -7,7 +7,8 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Image
 } from 'react-native';
 
 import { SlideButton } from 'react-native-slide-button';
@@ -51,7 +52,7 @@ class SlideButtonExample extends Component {
         <View style={styles.buttonOuter}>
           <SlideButton onSwipeSuccess={this.onSlide.bind(this)}>
             <View style={styles.buttonInner}>
-              <Text style={styles.button}>Slide Button</Text>
+              <Text style={styles.button}>Slide To Proceed</Text>
             </View>
           </SlideButton>
         </View>
