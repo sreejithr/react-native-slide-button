@@ -97,9 +97,9 @@ export class SlideButton extends Component {
     });
   }
 
-  onSwipeSuccess() {
-    if (this.props.onSwipeSuccess !== undefined) {
-      this.props.onSwipeSuccess();
+  onSlideSuccess() {
+    if (this.props.onSlideSuccess !== undefined) {
+      this.props.onSlideSuccess();
     }
   }
 

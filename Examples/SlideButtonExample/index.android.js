@@ -50,7 +50,7 @@ class SlideButtonExample extends Component {
         </View>
 
         <View style={styles.buttonOuter}>
-          <SlideButton onSwipeSuccess={this.onSlide.bind(this)}>
+          <SlideButton onSlideSuccess={this.onSlide.bind(this)}>
             <View style={styles.buttonInner}>
               <Text style={styles.button}>Slide To Proceed</Text>
             </View>
