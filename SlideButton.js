@@ -54,7 +54,7 @@ export class SlideButton extends Component {
           // Move the button out
           this.moveButtonOut(() => {
             self.setState({ swiped: true });
-            self.onSwipeSuccess();
+            self.onSlideSuccess();
           });
 
           // Slide it back in after 1 sec
