@@ -14,7 +14,7 @@ Usage
 
 ```
 <View style={{height: 50, width: 500}}>       <!-- Outer wrapper -->
-  <SlideButton onSwipeSuccess={this.onSlide.bind(this)}>
+  <SlideButton onSlideSuccess={this.onSlide.bind(this)}>
     <View style={{height: 50, width: 500}}>   <!-- Inner wrapper -->
       <Text>Slide Button</Text>
     </View>
