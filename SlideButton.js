@@ -15,6 +15,11 @@ var Dimensions = require('Dimensions');
 var SCREEN_WIDTH = Dimensions.get('window').width;
 var SCREEN_HEIGHT = Dimensions.get('window').height;
 
+export var SlideDirection = {
+  LEFT: "left",
+  RIGHT: "right",
+  BOTH: "both"
+};
 
 export class SlideButton extends Component {
   constructor(props) {
@@ -30,8 +35,29 @@ export class SlideButton extends Component {
     };
   }
 
+  /* Button movement of > 40% is considered a successful slide */
+  isSlideSuccessful() {
+    if (!this.props.slideDirection) {
+      return this.state.dx > (this.buttonWidth * 0.4);  // Defaults to right slide
+    } else if (this.props.slideDirection === SlideDirection.RIGHT) {
+      return this.state.dx > (this.buttonWidth * 0.4);
+    } else if (this.props.slideDirection === SlideDirection.LEFT) {
+      return this.state.dx < (this.buttonWidth * 0.4);
+    } else if (this.props.slideDirection === SlideDirection.BOTH) {
+      return Math.abs(this.state.dx) > (this.buttonWidth * 0.4);
+    }
+  }
+
+  onSlide(x) {
+    if (this.props.onSlide){
+      this.props.onSlide(x);
+    }
+  }
+
   componentWillMount() {
     var self = this;
+
+    // TODO: Raise error if slideDirection prop is invalid.
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -46,15 +72,15 @@ export class SlideButton extends Component {
           locationX: evt.nativeEvent.locationX,
           dx: gestureState.dx
         });
+        self.onSlide(gestureState.dx);
       },
 
       onPanResponderRelease: (evt, gestureState) => {
-        // Button movement of > 40% is considered a successful slide
-        if (this.state.dx > (this.buttonWidth * 0.4)) {
+        if (this.isSlideSuccessful()) {
           // Move the button out
           this.moveButtonOut(() => {
             self.setState({ swiped: true });
-            self.onSlideSuccess();
+            self.props.onSlideSuccess();
           });
 
           // Slide it back in after 1 sec
@@ -115,7 +141,8 @@ export class SlideButton extends Component {
 
   moveButtonIn(onCompleteCallback) {
     var self = this;
-    var startPos = this.state.initialX - this.buttonWidth;
+    var startPos = this.state.dx < 0 ? this.state.initialX + this.buttonWidth :
+        this.state.initialX - this.buttonWidth;
     var endPos = this.state.initialX;
 
     this.setState({
@@ -132,7 +159,7 @@ export class SlideButton extends Component {
   moveButtonOut(onCompleteCallback) {
     var self = this;
     var startPos = this.state.initialX + this.state.dx;
-    var endPos = this.buttonWidth * 2;
+    var endPos = this.state.dx < 0 ? -this.buttonWidth : this.buttonWidth * 2;
 
     this.setState({
       released: true,
@@ -170,20 +197,21 @@ export class SlideButton extends Component {
 
   render() {
     var style = [styles.button, this.props.style, {left: this.state.dx}];
-    var button = (
-        <View style={style}>
-          <View onLayout={this.onLayout.bind(this)}>
-            {this.props.children}
-          </View>
-        </View>
-    );
 
     if (this.state.released) {
       style = [styles.button, this.props.style, { left: this.state.animatedX }];
-      button = (
-          <Animated.View style={style}>
-            {this.props.children}
-          </Animated.View>
+      var button = (
+        <Animated.View style={style}>
+          {this.props.children}
+        </Animated.View>
+      );
+    } else {
+      var button = (
+        <View style={style}>
+          <View onLayout={this.onLayout.bind(this)}>
+          {this.props.children}
+          </View>
+        </View>
       );
     }
 

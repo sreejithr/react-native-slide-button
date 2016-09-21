@@ -14,7 +14,7 @@ Usage
 
 ```
 <View style={{height: 50, width: 500}}>       <!-- Outer wrapper -->
-  <SlideButton onSwipeSuccess={this.onSlide.bind(this}>
+  <SlideButton onSwipeSuccess={this.onSlide.bind(this)}>
     <View style={{height: 50, width: 500}}>   <!-- Inner wrapper -->
       <Text>Slide Button</Text>
     </View>
@@ -26,6 +26,6 @@ Usage
 
 TODO
 ---
-- [ ] Implement onSlide prop to let components listen to slide events.
+- [x] Implement onSlide prop to let components listen to slide events.
 - [ ] Write testcases.
 - [ ] Write separate convenience component tailored to meet the most common usecase; button with text inside.
