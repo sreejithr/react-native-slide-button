@@ -42,7 +42,7 @@ export class SlideButton extends Component {
     } else if (this.props.slideDirection === SlideDirection.RIGHT) {
       return this.state.dx > (this.buttonWidth * 0.4);
     } else if (this.props.slideDirection === SlideDirection.LEFT) {
-      return this.state.dx < (this.buttonWidth * 0.4);
+      return this.state.dx < -(this.buttonWidth * 0.4);
     } else if (this.props.slideDirection === SlideDirection.BOTH) {
       return Math.abs(this.state.dx) > (this.buttonWidth * 0.4);
     }
