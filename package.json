@@ -1,6 +1,6 @@
 {
   "name": "react-native-slide-button",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Slide to proceed button for React Native",
   "main": "SlideButton.js",
   "scripts": {
