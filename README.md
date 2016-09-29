@@ -34,13 +34,13 @@ API
 ---
 ### SlideButton
 
-| Prop           | Type       | Default              |   Description
-| -------------  |:----------:|:--------------------:|:------------------
-| width          | number     | <required>           | Width of button
-| height         | number     | <required>           | Height of button
-| slideDirection | string     | SlideDirection.RIGHT | Determines which direction to slide. Either `SlideDirection.LEFT`, `SlideDirection.RIGHT`, `SlideDirection.BOTH`.
-| onSlideSuccess | function   | <optional>           | Fired when slide succeeds
-| onSlide        | function   | <optional>           | Fired on every movement. Distance of movement is passed as argument.
+| Prop           | Type       | Default               |   Description
+| -------------  |:----------:|:---------------------:|:------------------
+| width          | number     | <required>            | Width of button
+| height         | number     | <required>            | Height of button
+| slideDirection | string     | `SlideDirection.RIGHT`| Determines which direction to slide. Either `SlideDirection.LEFT`, `SlideDirection.RIGHT`, `SlideDirection.BOTH`.
+| onSlideSuccess | function   | <optional>            | Fired when slide succeeds
+| onSlide        | function   | <optional>            | Fired on every movement. Distance of movement is passed as argument.
 
 
 TODO
