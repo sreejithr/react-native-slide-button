@@ -66,26 +66,35 @@ export default class SlideButtonExample extends Component {
           </Text>
         </View>
 
-        <View style={[styles.buttonOuter, {backgroundColor: rightButtonColor}]}>
-          <SlideButton onSlideSuccess={this.onRightSlide.bind(this)}>
+        <View style={{marginTop: 20, backgroundColor: rightButtonColor}}>
+          <SlideButton
+           onSlideSuccess={this.onRightSlide.bind(this)}
+           width={SCREEN_WIDTH-40}
+           height={50}>
             <View style={styles.buttonInner}>
               <Text style={styles.button}>Slide Right</Text>
             </View>
           </SlideButton>
         </View>
 
-        <View style={[styles.buttonOuter, {backgroundColor: leftButtonColor}]}>
-          <SlideButton onSlideSuccess={this.onLeftSlide.bind(this)}
-           slideDirection={SlideDirection.LEFT}>
+        <View style={{marginTop: 20, backgroundColor: leftButtonColor}}>
+          <SlideButton
+           onSlideSuccess={this.onLeftSlide.bind(this)}
+           slideDirection={SlideDirection.LEFT}
+           width={SCREEN_WIDTH-40}
+           height={50}>
             <View style={styles.buttonInner}>
               <Text style={styles.button}>Slide Left</Text>
             </View>
           </SlideButton>
         </View>
 
-        <View style={[styles.buttonOuter, {backgroundColor: bothButtonColor}]}>
-          <SlideButton onSlideSuccess={this.onBothSlide.bind(this)}
-           slideDirection={SlideDirection.BOTH}>
+        <View style={{marginTop: 20, backgroundColor: bothButtonColor}}>
+          <SlideButton
+           onSlideSuccess={this.onBothSlide.bind(this)}
+           slideDirection={SlideDirection.BOTH}
+           width={SCREEN_WIDTH-40}
+           height={50}>
             <View style={styles.buttonInner}>
               <Text style={styles.button}>Slide Any Direction</Text>
             </View>
@@ -103,9 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   buttonOuter: {
-    height: 50,
-    marginTop: 20,
-    width: SCREEN_WIDTH-40
+    marginTop: 20
   },
   buttonInner: {
     width: SCREEN_WIDTH-40,
