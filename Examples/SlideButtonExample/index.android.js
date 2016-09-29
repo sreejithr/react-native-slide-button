@@ -11,7 +11,7 @@ import {
   Image
 } from 'react-native';
 
-import { SlideButton } from 'react-native-slide-button';
+import { SlideButton, SlideDirection } from 'react-native-slide-button';
 
 var Dimensions = require('Dimensions');
 var SCREEN_WIDTH = Dimensions.get('window').width;
@@ -20,12 +20,26 @@ class SlideButtonExample extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      swiped: false
+      swiped: false,
+      leftButtonText: "Slide Left To Proceed",
+      rightButtonText: "Slide Right To Proceed",
     };
   }
 
-  onSlide() {
-    this.setState({swiped: !this.state.swiped});
+  onLeftSlide() {
+    var self = this;
+    var oldButtonText = this.state.leftButtonText;
+    this.setState({leftButtonText: "Slide Successful!"}, () => {
+      setTimeout(() => self.setState({leftButtonText: oldButtonText}));
+    }, 1000);
+  }
+
+  onRightSlide() {
+    var self = this;
+    var oldButtonText = this.state.rightButtonText;
+    this.setState({leftButtonText: "Slide Successful!"}, () => {
+      setTimeout(() => self.setState({rightButtonText: oldButtonText}));
+    }, 1000);
   }
 
   render() {
@@ -50,9 +64,18 @@ class SlideButtonExample extends Component {
         </View>
 
         <View style={styles.buttonOuter}>
-          <SlideButton onSlideSuccess={this.onSlide.bind(this)}>
+          <SlideButton onSlideSuccess={this.onRightSlide.bind(this)}>
             <View style={styles.buttonInner}>
-              <Text style={styles.button}>Slide To Proceed</Text>
+              <Text style={styles.button}>{this.state.rightButtonText}</Text>
+            </View>
+          </SlideButton>
+        </View>
+
+        <View style={styles.buttonOuter}>
+          <SlideButton onSlideSuccess={this.onLeftSlide.bind(this)}
+           slideDirection={SlideDirection.LEFT}>
+            <View style={styles.buttonInner}>
+              <Text style={styles.button}>{this.state.leftButtonText}</Text>
             </View>
           </SlideButton>
         </View>
