@@ -11,10 +11,6 @@ import {
   Animated
 } from 'react-native';
 
-var Dimensions = require('Dimensions');
-var SCREEN_WIDTH = Dimensions.get('window').width;
-var SCREEN_HEIGHT = Dimensions.get('window').height;
-
 export var SlideDirection = {
   LEFT: "left",
   RIGHT: "right",
