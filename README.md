@@ -6,16 +6,19 @@ Customizable slide button component for React Native.
 Installation
 ---
 ```
-npm i react-native-slide-button
+npm i --save react-native-slide-button
 ```
 
 Usage
 ---
 
 ```
+import { SlideButton, SlideDirection } from 'react-native-slide-button';
+
 <View style={{backgroundColor: 'blue'}}>        <!-- Outer wrapper -->
   <SlideButton
    onSlideSuccess={this.onSlide.bind(this)}
+   slideDirection={SlideDirection.LEFT}
    width={500}
    height={50}>
     <View style={height: 50, width: 500}>       <!-- Inner wrapper -->
@@ -24,8 +27,8 @@ Usage
   </SlideButton>
 </View>
 ```
-* Inner wrapper contents will be moved when swiped. Button text, for example, ,may go here.
-* Outer wrapper contents are static and will not move. Button's background and other styles, may go here.
+* **Inner wrapper**: Contents that will move when swiped. Eg: Button text, image etc.
+* **Outer wrapper**: Contents that are static and will not move. Eg: Button's background, other styles
 
 API
 ---
@@ -35,7 +38,7 @@ API
 | -------------  |:----------:|:--------------------:|:------------------
 | width          | number     | <required>           | Width of button
 | height         | number     | <required>           | Height of button
-| slideDirection | string     | SlideDirection.RIGHT | Determines which direction to slide. Either SlideDirection.LEFT, SlideDirection.RIGHT, SlideDirection.BOTH.
+| slideDirection | string     | SlideDirection.RIGHT | Determines which direction to slide. Either `SlideDirection.LEFT`, `SlideDirection.RIGHT`, `SlideDirection.BOTH`.
 | onSlideSuccess | function   | <optional>           | Fired when slide succeeds
 | onSlide        | function   | <optional>           | Fired on every movement. Distance of movement is passed as argument.
 
