@@ -28,7 +28,14 @@ export class SlideButton extends Component {
       animatedX: new Animated.Value(0),
       released: false,
       swiped: true,
+      slideBackTimer: null
     };
+  }
+
+  componentWillUnmount() {
+    if (this.state.slideBackTimer) {
+      clearTimeout(this.state.slideBackTimer);
+    }
   }
 
   /* Button movement of > 40% is considered a successful slide */
@@ -80,7 +87,7 @@ export class SlideButton extends Component {
           });
 
           // Slide it back in after 1 sec
-          setTimeout(() => {
+          var slideBackTimer = setTimeout(() => {
             self.moveButtonIn(() => {
               self.setState({
                 released: false,
@@ -89,6 +96,7 @@ export class SlideButton extends Component {
             });
           }, 1000);
 
+          self.setState({ slideBackTimer: slideBackTimer });
         } else {
           this.snapToPosition(() => {
             self.setState({
