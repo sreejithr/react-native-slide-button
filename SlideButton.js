@@ -31,16 +31,18 @@ export class SlideButton extends Component {
     };
   }
 
-  /* Button movement of > 40% is considered a successful slide */
+  /* Button movement of > 40% is considered a successful slide by default*/
   isSlideSuccessful() {
+    var slidePercent = this.props.successfulSlidePercent || 40;
+    var successfulSlideWidth = this.buttonWidth * slidePercent / 100;
     if (!this.props.slideDirection) {
-      return this.state.dx > (this.buttonWidth * 0.4);  // Defaults to right slide
+      return this.state.dx > this.props.successfulSlideWidth;  // Defaults to right slide
     } else if (this.props.slideDirection === SlideDirection.RIGHT) {
-      return this.state.dx > (this.buttonWidth * 0.4);
+      return this.state.dx > this.props.successfulSlideWidth;
     } else if (this.props.slideDirection === SlideDirection.LEFT) {
-      return this.state.dx < -(this.buttonWidth * 0.4);
+      return this.state.dx < (-1 * this.props.successfulSlideWidth);
     } else if (this.props.slideDirection === SlideDirection.BOTH) {
-      return Math.abs(this.state.dx) > (this.buttonWidth * 0.4);
+      return Math.abs(this.state.dx) > this.props.successfulSlideWidth;
     }
   }
 
@@ -213,7 +215,8 @@ export class SlideButton extends Component {
 
 SlideButton.propTypes = {
     width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
+    height: React.PropTypes.number.isRequired,
+    successfulSlidePercent: React.PropTypes.number
 };
 
 const styles = StyleSheet.create({

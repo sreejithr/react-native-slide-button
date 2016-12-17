@@ -41,6 +41,7 @@ API
 | slideDirection | string     | `SlideDirection.RIGHT`| Determines which direction to slide. Either `SlideDirection.LEFT`, `SlideDirection.RIGHT`, `SlideDirection.BOTH`.
 | onSlideSuccess | function   | <optional>            | Fired when slide succeeds
 | onSlide        | function   | <optional>            | Fired on every movement. Distance of movement is passed as argument.
+| successfulSlidePercent | number | <optional>        | Percent of total button width needed to slide before movement is seen as a successful slide. Default is 40.
 
 
 TODO
