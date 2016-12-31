@@ -49,8 +49,13 @@ export class SlideButton extends Component {
       this.props.onSlide(x);
     }
   }
+  
+  componentWillUnmount() {
+    this.mounted = false
+  }
 
   componentWillMount() {
+    this.mounted = true
     var self = this;
 
     // TODO: Raise error if slideDirection prop is invalid.
@@ -81,12 +86,14 @@ export class SlideButton extends Component {
 
           // Slide it back in after 1 sec
           setTimeout(() => {
-            self.moveButtonIn(() => {
-              self.setState({
-                released: false,
-                dx: self.state.initialX
+            if (self.mounted) {
+              self.moveButtonIn(() => {
+                self.setState({
+                  released: false,
+                  dx: self.state.initialX
+                });
               });
-            });
+            }
           }, 1000);
 
         } else {
