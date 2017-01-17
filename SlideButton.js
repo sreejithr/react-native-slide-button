@@ -11,6 +11,10 @@ import {
   Animated
 } from 'react-native';
 
+var Dimensions = require('Dimensions');
+var SCREEN_WIDTH = Dimensions.get('window').width;
+var SCREEN_HEIGHT = Dimensions.get('window').height;
+
 export var SlideDirection = {
   LEFT: "left",
   RIGHT: "right",
@@ -50,7 +54,12 @@ export class SlideButton extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.mounted = false
+  }
+
   componentWillMount() {
+    this.mounted = true
     var self = this;
 
     // TODO: Raise error if slideDirection prop is invalid.
@@ -76,17 +85,19 @@ export class SlideButton extends Component {
           // Move the button out
           this.moveButtonOut(() => {
             self.setState({ swiped: true });
-            self.props.onSlideSuccess();
+            self.onSlideSuccess();
           });
 
           // Slide it back in after 1 sec
           setTimeout(() => {
-            self.moveButtonIn(() => {
-              self.setState({
-                released: false,
-                dx: self.state.initialX
+            if (self.mounted) {
+              self.moveButtonIn(() => {
+                self.setState({
+                  released: false,
+                  dx: self.state.initialX
+                });
               });
-            });
+            }
           }, 1000);
 
         } else {
@@ -121,8 +132,29 @@ export class SlideButton extends Component {
 
   onSlideSuccess() {
     if (this.props.onSlideSuccess !== undefined) {
-      this.props.onSlideSuccess();
+
+      var direction = null
+
+      if (this.props.slideDirection === SlideDirection.BOTH) {
+        if (this.state.dx > (this.buttonWidth * 0.4)) {
+          direction = SlideDirection.RIGHT
+        } else {
+          direction = SlideDirection.LEFT
+        }
+      }
+
+      this.props.onSlideSuccess(direction);
     }
+  }
+
+  measureButton() {
+    var self = this;
+    this.refs.button.measure((ox, oy, width, height) => {
+      self.setState({
+        initialX: ox,
+        buttonWidth: width
+      });
+    });
   }
 
   moveButtonIn(onCompleteCallback) {
@@ -185,7 +217,7 @@ export class SlideButton extends Component {
     var style = [styles.button, this.props.style, {left: this.state.dx}];
 
     if (this.state.released) {
-      style = [styles.button, this.props.style, {left: this.state.animatedX}];
+      style = [styles.button, this.props.style, { left: this.state.animatedX }];
       var button = (
         <Animated.View style={style}>
           {this.props.children}
@@ -195,26 +227,20 @@ export class SlideButton extends Component {
       var button = (
         <View style={style}>
           <View onLayout={this.onLayout.bind(this)}>
-           {this.props.children}
+          {this.props.children}
           </View>
         </View>
       );
     }
 
     return (
-      <View style={{width: this.props.width, height: this.props.height, overflow:  'hidden'}}>
-        <View style={styles.container} {...this.panResponder.panHandlers}>
+        <View ref="button" style={styles.container} 
+         {...this.panResponder.panHandlers}>
           { button }
         </View>
-      </View>
     );
   }
 }
-
-SlideButton.propTypes = {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired
-};
 
 const styles = StyleSheet.create({
   container: {
