@@ -15,10 +15,17 @@ Usage
 ```
 import { SlideButton, SlideDirection } from 'react-native-slide-button';
 
+getEndDirection(direction){
+    this.setState({
+        endDirection:direction
+    })
+}
+
 <View style={{backgroundColor: 'blue'}}>        <!-- Outer wrapper -->
   <SlideButton
    onSlideSuccess={this.onSlide.bind(this)}
    slideDirection={SlideDirection.LEFT}
+   endDirection ={this.getEndDirection.bind(this)}
    width={500}
    height={50}>
     <View style={height: 50, width: 500}>       <!-- Inner wrapper -->
@@ -42,6 +49,7 @@ API
 | onSlideSuccess | function   | <optional>            | Fired when slide succeeds
 | onSlide        | function   | <optional>            | Fired on every movement. Distance of movement is passed as argument.
 | successfulSlidePercent | number | <optional>        | Percent of total button width needed to slide before movement is seen as a successful slide. Default is 40.
+| endDirection   | function   | <optional>            | Direction of the button slided by user. Useful when using `SlideDirection.BOTH`.  
 
 
 TODO

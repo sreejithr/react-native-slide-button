@@ -27,7 +27,7 @@ export class SlideButton extends Component {
       dx: 0,
       animatedX: new Animated.Value(0),
       released: false,
-      swiped: true,
+      swiped: true
     };
   }
 
@@ -36,13 +36,13 @@ export class SlideButton extends Component {
     var slidePercent = this.props.successfulSlidePercent || 40;
     var successfulSlideWidth = this.buttonWidth * slidePercent / 100;
     if (!this.props.slideDirection) {
-      return this.state.dx > this.props.successfulSlideWidth;  // Defaults to right slide
+      return this.state.dx > successfulSlideWidth;  // Defaults to right slide
     } else if (this.props.slideDirection === SlideDirection.RIGHT) {
-      return this.state.dx > this.props.successfulSlideWidth;
+      return this.state.dx > successfulSlideWidth;
     } else if (this.props.slideDirection === SlideDirection.LEFT) {
-      return this.state.dx < (-1 * this.props.successfulSlideWidth);
+      return this.state.dx < (-1 * successfulSlideWidth);
     } else if (this.props.slideDirection === SlideDirection.BOTH) {
-      return Math.abs(this.state.dx) > this.props.successfulSlideWidth;
+      return Math.abs(this.state.dx) > successfulSlideWidth;
     }
   }
 
@@ -78,6 +78,14 @@ export class SlideButton extends Component {
           // Move the button out
           this.moveButtonOut(() => {
             self.setState({ swiped: true });
+            //Set swipe ditrection details : usable for SlideDirection.BOTH
+            if(self.props.endDirection !== undefined){
+              if(self.state.dx > 0){
+                self.props.endDirection(SlideDirection.RIGHT)
+              }else{
+                self.props.endDirection(SlideDirection.LEFT)
+              }
+          }
             self.props.onSlideSuccess();
           });
 
