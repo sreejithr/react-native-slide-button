@@ -26,6 +26,7 @@ getEndDirection(direction){
    onSlideSuccess={this.onSlide.bind(this)}
    slideDirection={SlideDirection.LEFT}
    endDirection ={this.getEndDirection.bind(this)}
+   slideBackToOriginal={false}
    width={500}
    height={50}>
     <View style={height: 50, width: 500}>       <!-- Inner wrapper -->
@@ -50,7 +51,7 @@ API
 | onSlide        | function   | <optional>            | Fired on every movement. Distance of movement is passed as argument.
 | successfulSlidePercent | number | <optional>        | Percent of total button width needed to slide before movement is seen as a successful slide. Default is 40.
 | endDirection   | function   | <optional>            | Direction of the button slided by user. Useful when using `SlideDirection.BOTH`.  
-
+| slideBackToOriginal | boolean | <optional>          | Default to true. Whether to Slide back the button back to it's original position after 1 second
 
 TODO
 ---
