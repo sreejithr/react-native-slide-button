@@ -89,15 +89,18 @@ export class SlideButton extends Component {
             self.props.onSlideSuccess();
           });
 
-          // Slide it back in after 1 sec
-          setTimeout(() => {
-            self.moveButtonIn(() => {
-              self.setState({
-                released: false,
-                dx: self.state.initialX
+          // Slide it back in after 1 sec depending on the user preference
+          var isSlideBack = self.props.slideBackToOriginal === undefined ? true : self.props.slideBackToOriginal
+          if(isSlideBack){
+            setTimeout(() => {
+              self.moveButtonIn(() => {
+                self.setState({
+                  released: false,
+                  dx: self.state.initialX
+                });
               });
-            });
-          }, 1000);
+            }, 1000);
+          }
 
         } else {
           this.snapToPosition(() => {
