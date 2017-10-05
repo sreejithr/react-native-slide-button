@@ -1,6 +1,7 @@
 'use strict';
 
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
@@ -214,9 +215,9 @@ export class SlideButton extends Component {
 }
 
 SlideButton.propTypes = {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    successfulSlidePercent: React.PropTypes.number
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    successfulSlidePercent: PropTypes.number
 };
 
 const styles = StyleSheet.create({
