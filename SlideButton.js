@@ -10,6 +10,7 @@ import {
   PanResponder,
   Animated
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 export var SlideDirection = {
   LEFT: "left",
@@ -241,9 +242,9 @@ export class SlideButton extends Component {
 }
 
 SlideButton.propTypes = {
-    width: React.PropTypes.number.isRequired,
-    height: React.PropTypes.number.isRequired,
-    successfulSlidePercent: React.PropTypes.number
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    successfulSlidePercent: PropTypes.number
 };
 
 const styles = StyleSheet.create({
