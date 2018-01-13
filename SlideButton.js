@@ -242,8 +242,6 @@ export class SlideButton extends Component {
 }
 
 SlideButton.propTypes = {
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
     successfulSlidePercent: PropTypes.number
 };
 
