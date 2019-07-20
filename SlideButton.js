@@ -11,7 +11,7 @@ import {
   Animated
 } from 'react-native';
 
-export var SlideDirection = {
+export const SlideDirection = {
   LEFT: "left",
   RIGHT: "right",
   BOTH: "both"
@@ -29,33 +29,6 @@ export class SlideButton extends Component {
       released: false,
       swiped: true,
     };
-  }
-
-  /* Button movement of > 40% is considered a successful slide by default*/
-  isSlideSuccessful() {
-    var slidePercent = this.props.successfulSlidePercent || 40;
-    var successfulSlideWidth = this.buttonWidth * slidePercent / 100;
-    if (!this.props.slideDirection) {
-      return this.state.dx > this.props.successfulSlideWidth;  // Defaults to right slide
-    } else if (this.props.slideDirection === SlideDirection.RIGHT) {
-      return this.state.dx > this.props.successfulSlideWidth;
-    } else if (this.props.slideDirection === SlideDirection.LEFT) {
-      return this.state.dx < (-1 * this.props.successfulSlideWidth);
-    } else if (this.props.slideDirection === SlideDirection.BOTH) {
-      return Math.abs(this.state.dx) > this.props.successfulSlideWidth;
-    }
-  }
-
-  onSlide(x) {
-    if (this.props.onSlide){
-      this.props.onSlide(x);
-    }
-  }
-
-  componentWillMount() {
-    var self = this;
-
-    // TODO: Raise error if slideDirection prop is invalid.
 
     this.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => true,
@@ -66,36 +39,36 @@ export class SlideButton extends Component {
       onPanResponderGrant: (evt, gestureState) => {},
 
       onPanResponderMove: (evt, gestureState) => {
-        self.setState({
+        this.setState({
           locationX: evt.nativeEvent.locationX,
           dx: gestureState.dx
         });
-        self.onSlide(gestureState.dx);
+        this.onSlide(gestureState.dx);
       },
 
       onPanResponderRelease: (evt, gestureState) => {
         if (this.isSlideSuccessful()) {
           // Move the button out
           this.moveButtonOut(() => {
-            self.setState({ swiped: true });
-            self.props.onSlideSuccess();
+            this.setState({ swiped: true });
+            props.onSlideSuccess();
           });
 
-          // Slide it back in after 1 sec
+          // Slide it back in after 0.5 sec
           setTimeout(() => {
-            self.moveButtonIn(() => {
-              self.setState({
+            this.moveButtonIn(() => {
+              this.setState({
                 released: false,
-                dx: self.state.initialX
+                dx: this.state.initialX
               });
             });
-          }, 1000);
+          }, 500);
 
         } else {
           this.snapToPosition(() => {
-            self.setState({
+            this.setState({
               released: false,
-              dx: self.state.initialX
+              dx: this.state.initialX
             });
           });
         }
@@ -105,9 +78,9 @@ export class SlideButton extends Component {
         // Another component has become the responder, so this gesture
         // should be cancelled
         this.snapToPosition(() => {
-            self.setState({
+            this.setState({
               released: false,
-              dx: self.state.initialX
+              dx: this.state.initialX
             });
           });
       },
@@ -121,62 +94,80 @@ export class SlideButton extends Component {
     });
   }
 
-  onSlideSuccess() {
+  /* Button movement of > 40% is considered a successful slide by default*/
+  isSlideSuccessful = () => {
+    const slidePercent = this.props.successfulSlidePercent || 40;
+    const successfulSlideWidth = this.buttonWidth * slidePercent / 100;
+    if (!this.props.slideDirection) {
+      return this.state.dx > this.props.successfulSlideWidth;  // Defaults to right slide
+    } else if (this.props.slideDirection === SlideDirection.RIGHT) {
+      return this.state.dx > this.props.successfulSlideWidth;
+    } else if (this.props.slideDirection === SlideDirection.LEFT) {
+      return this.state.dx < (-1 * this.props.successfulSlideWidth);
+    } else if (this.props.slideDirection === SlideDirection.BOTH) {
+      return Math.abs(this.state.dx) > this.props.successfulSlideWidth;
+    }
+  }
+
+  onSlide = x => {
+    if (this.props.onSlide){
+      this.props.onSlide(x);
+    }
+  }
+
+  onSlideSuccess = () => {
     if (this.props.onSlideSuccess !== undefined) {
       this.props.onSlideSuccess();
     }
   }
 
-  moveButtonIn(onCompleteCallback) {
-    var self = this;
-    var startPos = this.state.dx < 0 ? this.state.initialX + this.buttonWidth :
+  moveButtonIn = onCompleteCallback => {
+    const startPos = this.state.dx < 0 ? this.state.initialX + this.buttonWidth :
         this.state.initialX - this.buttonWidth;
-    var endPos = this.state.initialX;
+    const endPos = this.state.initialX;
 
     this.setState({
       released: true,
       animatedX: new Animated.Value(startPos)
     }, () => {
       Animated.timing(
-        self.state.animatedX,
+        this.state.animatedX,
         { toValue: endPos }
       ).start(onCompleteCallback);
     });
   }
 
-  moveButtonOut(onCompleteCallback) {
-    var self = this;
-    var startPos = this.state.initialX + this.state.dx;
-    var endPos = this.state.dx < 0 ? -this.buttonWidth : this.buttonWidth * 2;
+  moveButtonOut = onCompleteCallback => {
+    const startPos = this.state.initialX + this.state.dx;
+    const endPos = this.state.dx < 0 ? -this.buttonWidth : this.buttonWidth * 2;
 
     this.setState({
       released: true,
       animatedX: new Animated.Value(startPos)
     }, () => {
       Animated.timing(
-        self.state.animatedX,
+        this.state.animatedX,
         { toValue: endPos }
       ).start(onCompleteCallback);
     });
   }
 
-  snapToPosition(onCompleteCallback) {
-    var self = this;
-    var startPos = this.state.initialX + this.state.dx;
-    var endPos = this.state.initialX;
+  snapToPosition = onCompleteCallback =>{
+    const startPos = this.state.initialX + this.state.dx;
+    const endPos = this.state.initialX;
 
     this.setState({
       released: true,
       animatedX: new Animated.Value(startPos)
     }, () => {
       Animated.timing(
-        self.state.animatedX,
+        this.state.animatedX,
         { toValue: endPos }
       ).start(onCompleteCallback);
     });
   }
 
-  onLayout(event) {
+  onLayout = event => {
     this.buttonWidth = event.nativeEvent.layout.width;
     this.setState({
       initialX: event.nativeEvent.layout.x
@@ -184,29 +175,18 @@ export class SlideButton extends Component {
   }
 
   render() {
-    var style = [styles.button, this.props.style, {left: this.state.dx}];
-
-    if (this.state.released) {
-      style = [styles.button, this.props.style, {left: this.state.animatedX}];
-      var button = (
-        <Animated.View style={style}>
-          {this.props.children}
-        </Animated.View>
-      );
-    } else {
-      var button = (
-        <View style={style}>
-          <View onLayout={this.onLayout.bind(this)}>
-           {this.props.children}
-          </View>
-        </View>
-      );
-    }
-
     return (
       <View style={{width: this.props.width, height: this.props.height, overflow:  'hidden'}}>
         <View style={styles.container} {...this.panResponder.panHandlers}>
-          { button }
+          <InnerButton
+            styles={this.props.styles}
+            dx={this.state.dx}
+            animatedX={this.state.animatedX}
+            released={this.state.released}
+            onLayoutChange={this.onLayout}
+          >
+            {this.props.children}
+          </InnerButton>
         </View>
       </View>
     );
@@ -227,3 +207,31 @@ const styles = StyleSheet.create({
     position: 'absolute'
   }
 })
+
+const InnerButton = ({
+  styles,
+  dx,
+  animatedX,
+  released,
+  children,
+  onLayoutChange
+}) => {
+  const style = [styles.button, stylez, {left: dx}];
+
+  if (released) {
+    style = [styles.button, stylez, {left: animatedX}];
+    return (
+      <Animated.View style={style}>
+        {children}
+      </Animated.View>
+    );
+  } else {
+    return (
+      <View style={style}>
+        <View onLayout={onLayoutChange}>
+         {children}
+        </View>
+      </View>
+    );
+  }
+}
