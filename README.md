@@ -21,7 +21,7 @@ import { SlideButton, SlideDirection } from 'react-native-slide-button';
    slideDirection={SlideDirection.LEFT}
    width={500}
    height={50}>
-    <View style={height: 50, width: 500}>       <!-- Inner wrapper -->
+    <View style={{height: 50, width: 500}}>       <!-- Inner wrapper -->
       <Text style={styles.button}>Slide Button</Text>
     </View>
   </SlideButton>
